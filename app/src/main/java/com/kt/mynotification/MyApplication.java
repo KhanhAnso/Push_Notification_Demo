@@ -46,7 +46,8 @@ public class MyApplication extends Application {
             //config channel 2
             CharSequence name_2 = getString(R.string.channel_name_2);
             String description_2 = getString(R.string.channel_description_2);
-            int importance_2 = NotificationManager.IMPORTANCE_DEFAULT;
+            //set độ ưu tiên với IMPORTTANCE_HIGH
+            int importance_2 = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel_2 = new NotificationChannel(CHANNEL_ID_2, name_2, importance_2);
             channel_2.setDescription(description_2);
             //set âm thanh mặc định
