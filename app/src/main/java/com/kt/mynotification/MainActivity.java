@@ -12,7 +12,9 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.RemoteViews;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +43,48 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_send_notification_2).setOnClickListener(view ->{
             sendNotificationChannel2();
         });
+
+        findViewById(R.id.btn_custom_notification).setOnClickListener(view ->{
+            sendCustomNotification();
+        });
+    }
+
+    private void sendCustomNotification() {
+        //set dữ liệu cho layout
+        RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.layout_custom_notification);
+        notificationLayout.setTextViewText(R.id.tv_title_custom_notification,"Title custom notification");
+        notificationLayout.setTextViewText(R.id.tv_message_custom_notificaiton,"Content message custom notification");
+        //
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String strDate = sdf.format(new Date());
+        notificationLayout.setTextViewText(R.id.tv_time_custom_notificaiton,strDate);
+
+        //expanded : đối với notification mở rộng
+        RemoteViews notificationLayout_expanded = new RemoteViews(getPackageName(), R.layout.layout_custom_notification_expanded);
+        notificationLayout_expanded.setTextViewText(R.id.tv_title_custom_notification__expanded,"Title custom notification _expanded");
+        notificationLayout_expanded.setTextViewText(R.id.tv_message_custom_notificaiton_expanded,"Content message custom notification _expanded");
+        notificationLayout_expanded.setImageViewResource(R.id.img_custom_notification_expanded,R.drawable.iconapp);
+        //nếu ảnh quá to ta convert sang bitmap
+        //notificationLayout_expanded.setImageViewResource(R.id.img_custom_notification_expanded_content,R.drawable.iconapp);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.iconapp);
+
+        notificationLayout_expanded.setImageViewBitmap(R.id.img_custom_notification_expanded_content,bitmap);
+
+        SimpleDateFormat sdf_expanded = new SimpleDateFormat("HH:mm:ss");
+        String strDate_expanded = sdf_expanded.format(new Date());
+        notificationLayout_expanded.setTextViewText(R.id.tv_time_custom_notificaiton_expanded,strDate_expanded);
+
+
+        //Sử dụng Notification
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(this,MyApplication.CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_baseline_location_on_24)
+                .setCustomContentView(notificationLayout)  //set layout dạng nhỏ
+                .setCustomBigContentView(notificationLayout_expanded);  //set layout dạng big
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        //set notification cho notificationManager
+        notificationManager.notify(getNotificationId(), notification.build());
+
     }
 
     //Nơi gửi notification tới cái notification channel id mà ta có.
