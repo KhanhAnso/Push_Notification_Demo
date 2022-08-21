@@ -9,6 +9,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import java.util.Date;
@@ -45,13 +47,17 @@ public class MainActivity extends AppCompatActivity {
     private void sendNotificationChannel1(){
         //ảnh ic_lancher, notification không thể convert ảnh dạng xml cho setLagrgeIcon()
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.iconapp);
-        //Sử dụn Notification
+        //âm thanh custom cho notification. get ra đường dẫn của file âm thanh
+        Uri sound = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.sound_notification_custom);
+
+        //Sử dụng Notification
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this,MyApplication.CHANNEL_ID)
                 .setContentTitle(TITLE_NOTIFICATION)
                 .setContentText(TEXT_CONTENT_NOTIFICATION)
                 //tạo big text cho content text với setStyle()
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(TEXT_CONTENT_NOTIFICATION))
                 .setSmallIcon(R.drawable.ic_baseline_location_on_24)
+                .setSound(sound)
                 .setLargeIcon(bitmap);   //set icon to cho notification
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -62,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
     //Nơi gửi notification tới cái notification channel id mà ta có.
     private void sendNotificationChannel2(){
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.iconapp);
+        //âm thanh mặc định của thông báo
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
         //Sử dụn Notification
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this,MyApplication.CHANNEL_ID_2)
                 .setContentTitle("Title push notification channel 2")
@@ -70,8 +79,9 @@ public class MainActivity extends AppCompatActivity {
                 .setLargeIcon(bitmap)
                 //icon lớn vào trong title
                 .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap).bigLargeIcon(null))
+                //set âm thanh cho thông báo
+                .setSound(uri)
                 .setColor(getResources().getColor(R.color.purple_200));
-
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         //set notification cho notificationManager
         notificationManager.notify(getNotificationId(), notification.build());
