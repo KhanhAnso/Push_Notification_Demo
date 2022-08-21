@@ -7,6 +7,7 @@ import android.os.Build;
 
 //Nơi tạo channel Id
 public class MyApplication extends Application {
+
     public static final String CHANNEL_ID = "CHANNEL_ID_1";
     //thêm channel id 2
     public static final String CHANNEL_ID_2 = "CHANNEL_ID_2";
